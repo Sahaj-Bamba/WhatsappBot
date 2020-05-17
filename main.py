@@ -16,6 +16,7 @@ with open('configuration.json') as f:
 
 keywords = data['keywords']
 msgs = data['replies']
+fixedReply = data['fixedReply']
 count = 1
 unreadClass = "OUeyt"
 sendButtonClass = "_35EW6"
@@ -63,7 +64,7 @@ def isHappyBirthday():
         eles = driver.find_elements_by_xpath(xpath)
         str = eles[-1].text
         for s in keywords:
-            if (s in str):
+            if (s in str.lower()):
                 return True
         return False
     except:
@@ -73,7 +74,7 @@ def isHappyBirthday():
 def sendMessage():
     msg_box = WebDriverWait(driver, 3).until(
         EC.presence_of_element_located((By.CLASS_NAME, msgBoxClass)))
-    msg_box.send_keys(msgs[random.randrange(len(msgs))])
+    msg_box.send_keys(msgs[random.randrange(len(msgs))] + fixedReply)
     button = WebDriverWait(driver, 5).until(
         EC.element_to_be_clickable((By.CLASS_NAME, sendButtonClass)))
     driver.implicitly_wait(0.25)
