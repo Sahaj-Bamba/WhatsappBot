@@ -5,11 +5,17 @@ from selenium.webdriver.common.by import By
 import time
 import os
 import gtts
+import random
+import json
+
+data = ""
+with open('configuration.json') as f:
+    data = json.load(f)
 
 # configurations
 
-keywords = ["happ", "Happ", "HAPP", "Birthday", "BIRTHDAY", "birthday"]
-msgs = ["Hi"]
+keywords = data['keywords']
+msgs = data['replies']
 count = 1
 unreadClass = "OUeyt"
 sendButtonClass = "_35EW6"
@@ -52,19 +58,22 @@ def openUnread():
 
 
 def isHappyBirthday():
-    xpath = '//span[@class="{}"]'.format(textClass)
-    eles = driver.find_elements_by_xpath(xpath)
-    str = eles[-1].text
-    for (s in keywords):
-        if (s in str):
-            return True
-    return False
+    try:
+        xpath = '//span[@class="{}"]'.format(textClass)
+        eles = driver.find_elements_by_xpath(xpath)
+        str = eles[-1].text
+        for s in keywords:
+            if (s in str):
+                return True
+        return False
+    except:
+        return False
 
 
 def sendMessage():
     msg_box = WebDriverWait(driver, 3).until(
         EC.presence_of_element_located((By.CLASS_NAME, msgBoxClass)))
-    msg_box.send_keys(msg[randrange(0, len(msg))])
+    msg_box.send_keys(msgs[random.randrange(len(msgs))])
     button = WebDriverWait(driver, 5).until(
         EC.element_to_be_clickable((By.CLASS_NAME, sendButtonClass)))
     driver.implicitly_wait(0.25)
