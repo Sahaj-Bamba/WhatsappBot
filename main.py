@@ -22,6 +22,7 @@ unreadClass = "OUeyt"
 sendButtonClass = "_35EW6"
 msgBoxClass = "_2WovP"
 textClass = "_3FXB1 selectable-text invisible-space copyable-text"
+replyNameClass = "_2a1Yw _1OmDL _3FXB1"
 dirPath = os.path.dirname(os.path.realpath(__file__))
 driver = webdriver.Chrome(dirPath+"\chromedriver.exe")
 driver.get("https://web.whatsapp.com/")
@@ -72,14 +73,37 @@ def isHappyBirthday():
 
 
 def sendMessage():
-    msg_box = WebDriverWait(driver, 3).until(
-        EC.presence_of_element_located((By.CLASS_NAME, msgBoxClass)))
-    msg_box.send_keys(msgs[random.randrange(len(msgs))] + fixedReply)
-    button = WebDriverWait(driver, 5).until(
-        EC.element_to_be_clickable((By.CLASS_NAME, sendButtonClass)))
-    driver.implicitly_wait(0.25)
-    button.click()
-    time.sleep(0.25)
+    try:
+        replyTo = getReplyTo()
+        replyText = ""
+        if (replyTo != None):
+            replyText = "@"+replyTo+" "
+        msg_box = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.CLASS_NAME, msgBoxClass)))
+        msg_box.send_keys(
+            replyText + msgs[random.randrange(len(msgs))])
+        button = WebDriverWait(driver, 2).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, sendButtonClass)))
+        driver.implicitly_wait(0.025)
+        button.click()
+        time.sleep(0.025)
+        msg_box.send_keys(fixedReply)
+        button = WebDriverWait(driver, 2).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, sendButtonClass)))
+        driver.implicitly_wait(0.025)
+        button.click()
+        time.sleep(0.025)
+    except:
+        return
+
+
+def getReplyTo():
+    try:
+        xpath = '//span[@class="{}"]'.format(replyNameClass)
+        user = driver.find_element_by_xpath(xpath)
+        return user.text
+    except:
+        return None
 
 
 while (True):
