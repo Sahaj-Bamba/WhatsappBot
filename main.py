@@ -13,7 +13,7 @@ with open('configuration.json') as f:
     data = json.load(f)
 
 # configurations
-
+prevReplyTo = "killer"
 keywords = data['keywords']
 msgs = data['replies']
 fixedReply = data['fixedReply']
@@ -75,9 +75,20 @@ def isHappyBirthday():
 def sendMessage():
     try:
         replyTo = getReplyTo()
+        # try:
+        #     replyTo = getReplyTo()
+        # print(replyTo)
+        # print(prevReplyTo)
+        # if (replyTo == prevReplyTo):
+        #     replyTo = "killer"
+        # except:
+        #     print("er")
+        #     pass
         replyText = ""
-        if (replyTo != None):
+        if (replyTo != "killer"):
             replyText = "@"+replyTo+" "
+            prevReplyTo = replyTo
+        print(replyText)
         msg_box = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located((By.CLASS_NAME, msgBoxClass)))
         msg_box.send_keys(
@@ -94,16 +105,18 @@ def sendMessage():
         button.click()
         time.sleep(0.025)
     except:
+        # print("ex")
         return
 
 
 def getReplyTo():
     try:
         xpath = '//span[@class="{}"]'.format(replyNameClass)
-        user = driver.find_element_by_xpath(xpath)
+        user = driver.find_elements_by_xpath(xpath)
+        user = user[-1]
         return user.text
     except:
-        return None
+        return "killer"
 
 
 while (True):
