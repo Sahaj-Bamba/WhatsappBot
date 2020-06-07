@@ -18,11 +18,11 @@ keywords = data['keywords']
 msgs = data['replies']
 fixedReply = data['fixedReply']
 count = 1
-unreadClass = "OUeyt"
-sendButtonClass = "_35EW6"
-msgBoxClass = "_2WovP"
-textClass = "_3FXB1 selectable-text invisible-space copyable-text"
-replyNameClass = "_2a1Yw _1OmDL _3FXB1"
+unreadClass = "_31gEB"
+sendButtonClass = "_1U1xa"
+msgBoxClass = "_3uMse"
+textClass = "_3Whw5 selectable-text invisible-space copyable-text"
+replyNameClass = "FMlAw FdF4z _3Whw5"
 dirPath = os.path.dirname(os.path.realpath(__file__))
 driver = webdriver.Chrome(dirPath+"\chromedriver.exe")
 driver.get("https://web.whatsapp.com/")
